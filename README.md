@@ -10,14 +10,17 @@
         :root {
             --neon-pink: #ff00ff;
             --neon-blue: #00ffff;
+            --neon-purple: #9d00ff;
             --sun-orange: #ff8c00;
             --sun-red: #ff0055;
-            --bg-dark: #050110;
+            --bg-dark: #030008;
+            --bg-glow: #1a0033;
         }
 
         body {
             margin: 0;
             padding: 0;
+            background: radial-gradient(circle at 50% 40%, var(--bg-glow) 0%, var(--bg-dark) 80%);
             background-color: var(--bg-dark);
             font-family: 'Orbitron', sans-serif;
             color: white;
@@ -25,6 +28,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         /* CRT Scanline Overlay */
@@ -33,141 +37,195 @@
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
             z-index: 100;
-            background-size: 100% 4px;
+            background-size: 100% 3px;
             pointer-events: none;
+            opacity: 0.6;
         }
 
-        /* The Synthwave Sun */
+        .star {
+            position: fixed;
+            background-color: #fff;
+            border-radius: 50%;
+            z-index: -4;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 10px #fff; }
+        }
+
         .sun {
             position: fixed;
-            top: 10%;
+            top: 12%;
             left: 50%;
             transform: translateX(-50%);
-            width: 350px;
-            height: 350px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
-            background: linear-gradient(var(--sun-orange) 0%, var(--sun-red) 50%, var(--bg-dark) 100%);
-            box-shadow: 0 0 60px var(--sun-red);
+            background: linear-gradient(var(--sun-orange) 0%, var(--sun-red) 40%, var(--bg-dark) 90%);
+            box-shadow: 0 0 40px var(--sun-red), 0 0 80px var(--sun-orange), 0 0 120px rgba(255, 0, 255, 0.3);
             z-index: -3;
             -webkit-mask-image: linear-gradient(to bottom, 
                 black 0%, black 60%, 
-                transparent 60%, transparent 65%, 
-                black 65%, black 75%, 
-                transparent 75%, transparent 82%, 
-                black 82%, black 90%, 
-                transparent 90%, transparent 97%, 
-                black 97%, black 100%);
+                transparent 62%, transparent 64%, 
+                black 66%, black 74%, 
+                transparent 76%, transparent 78%, 
+                black 80%, black 88%, 
+                transparent 90%, transparent 92%, 
+                black 94%, black 100%);
         }
 
-        /* Parallax Mountains */
+        /* MOUNTAINS WITH PASSAGEWAY */
         .mountain {
             position: fixed;
-            bottom: 35%;
+            bottom: 30%;
             width: 100%;
-            height: 300px;
+            height: 350px;
             z-index: -2;
         }
 
         .mtn-back {
-            background: #240b36;
-            clip-path: polygon(0% 100%, 15% 40%, 35% 80%, 50% 20%, 65% 70%, 85% 30%, 100% 100%);
-            opacity: 0.5;
+            background: #1a0033;
+            /* Creates a center gap for the road to "emerge" from */
+            clip-path: polygon(0% 100%, 10% 40%, 30% 85%, 42% 50%, 45% 100%, 55% 100%, 58% 50%, 70% 85%, 90% 40%, 100% 100%);
+            opacity: 0.4;
+            filter: blur(2px);
         }
 
         .mtn-front {
-            background: linear-gradient(to bottom, #4e035a, var(--bg-dark));
-            clip-path: polygon(0% 100%, 10% 70%, 25% 40%, 45% 90%, 60% 50%, 75% 80%, 90% 60%, 100% 100%);
-            border-top: 2px solid var(--neon-pink);
+            background: linear-gradient(to bottom, #300066, var(--bg-dark));
+            /* Sharper center gap */
+            clip-path: polygon(0% 100%, 15% 50%, 35% 90%, 45% 60%, 48% 100%, 52% 100%, 55% 60%, 65% 90%, 85% 50%, 100% 100%);
+            border-top: 3px solid var(--neon-pink);
+            filter: drop-shadow(0 0 15px var(--neon-pink));
         }
 
-        /* Moving Grid Floor */
-        .grid-floor {
+        /* PASSAGEWAY ROAD */
+        .grid-container {
             position: fixed;
             bottom: 0;
-            width: 200%;
+            width: 100%;
             height: 50vh;
-            background-image: 
-                linear-gradient(transparent 0%, var(--neon-blue) 100%),
-                linear-gradient(90deg, var(--neon-pink) 1px, transparent 0),
-                linear-gradient(var(--neon-pink) 1px, transparent 0);
-            background-size: 100% 100%, 60px 60px, 60px 60px;
-            transform: perspective(400px) rotateX(70deg);
-            transform-origin: bottom;
             z-index: -1;
-            opacity: 0.7;
+            /* Narrower perspective to force a sharper vanishing point in the middle */
+            perspective: 200px;
+            perspective-origin: 50% 0%; 
+            overflow: hidden;
+        }
+
+        .grid-floor {
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--bg-dark) 0%, transparent 20%, rgba(0, 255, 255, 0.1) 100%),
+                linear-gradient(90deg, var(--neon-blue) 1px, transparent 1px),
+                linear-gradient(var(--neon-pink) 1px, transparent 1px);
+            background-size: 100% 100%, 60px 60px, 60px 60px;
+            transform: rotateX(75deg);
+            transform-origin: top;
+            animation: roadMove 2s linear infinite;
+            /* Fades the road into the mountain gap */
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
+        }
+
+        @keyframes roadMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 60px; }
         }
 
         header {
-            margin: 80px 0 40px 0;
+            margin: 80px 0 50px 0;
             text-align: center;
             z-index: 10;
         }
 
         h1 {
             font-family: 'Mr Dafoe', cursive;
-            font-size: clamp(3rem, 10vw, 6rem);
+            font-size: clamp(3.5rem, 12vw, 7rem);
             color: #fff;
-            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink);
+            text-shadow: 3px 0px var(--neon-blue), -3px 0px var(--neon-pink), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px var(--neon-pink);
             transform: rotate(-5deg);
         }
 
         .shop-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            max-width: 900px;
+            gap: 40px;
+            max-width: 1000px;
             padding: 20px;
             z-index: 10;
         }
 
         .product-card {
-            background: rgba(5, 1, 16, 0.95);
-            border: 2px solid var(--neon-blue);
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border-radius: 4px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 0 15px var(--neon-blue);
-            transition: 0.3s;
+            position: relative;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.1);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: #fff;
+            box-shadow: 0 0 10px #fff, 0 0 20px var(--neon-blue);
+            opacity: 0.8;
         }
 
         .product-card:hover {
+            transform: translateY(-10px) scale(1.03);
             border-color: var(--neon-pink);
-            box-shadow: 0 0 25px var(--neon-pink);
-            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6), inset 0 0 20px rgba(255, 0, 255, 0.2);
         }
 
         .product-card img {
             width: 100%;
-            border: 1px solid #333;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             margin: 15px 0;
+            filter: contrast(1.2) brightness(1.1);
         }
 
         .price {
             display: block;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #ffff00;
             margin-bottom: 10px;
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
         }
 
         .description {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--neon-blue);
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         footer {
             margin: 100px 0;
-            background: #000;
-            padding: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
             border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 30px var(--neon-pink);
             text-align: center;
             z-index: 10;
-            width: 280px;
+            width: 320px;
         }
 
         footer h3 { color: var(--neon-pink); margin-top: 0; }
-        footer p { color: var(--neon-blue); font-family: monospace; font-size: 0.9rem; }
+        footer p { color: var(--neon-blue); font-family: monospace; font-size: 1rem; }
 
         @media (max-width: 700px) {
             .shop-container { grid-template-columns: 1fr; }
@@ -177,10 +235,15 @@
 </head>
 <body>
 
+    <div id="starfield"></div>
+
     <div class="sun"></div>
-    <div class="mountain mtn-back" id="mtn-back"></div>
-    <div class="mountain mtn-front" id="mtn-front"></div>
-    <div class="grid-floor" id="grid"></div>
+    <div class="mountain mtn-back"></div>
+    <div class="mountain mtn-front"></div>
+    
+    <div class="grid-container">
+        <div class="grid-floor"></div>
+    </div>
 
     <header>
         <h1>Replace Shop Name</h1>
@@ -219,17 +282,30 @@
     </footer>
 
     <script>
+        const starfield = document.getElementById('starfield');
+        const colors = ['#ff00ff', '#00ffff', '#ffffff', '#ffff00', '#9d00ff'];
+        
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 1 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 60 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            star.style.boxShadow = `0 0 8px ${star.style.backgroundColor}`;
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starfield.appendChild(star);
+        }
+
         window.addEventListener('scroll', () => {
             const scroll = window.pageYOffset;
-            
-            // Grid moves fast
-            document.getElementById('grid').style.backgroundPositionY = (scroll * 0.6) + 'px';
-            
-            // Front mountains move medium speed
-            document.getElementById('mtn-front').style.transform = `translateY(${scroll * 0.15}px)`;
-            
-            // Back mountains move slow (Parallax)
-            document.getElementById('mtn-back').style.transform = `translateY(${scroll * 0.05}px)`;
+            // Mountains still move slightly for parallax depth
+            const mtnFront = document.querySelector('.mtn-front');
+            const mtnBack = document.querySelector('.mtn-back');
+            mtnFront.style.transform = `translateY(${scroll * 0.1}px)`;
+            mtnBack.style.transform = `translateY(${scroll * 0.03}px)`;
         });
     </script>
 </body>
