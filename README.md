@@ -78,7 +78,6 @@
                 black 94%, black 100%);
         }
 
-        /* MOUNTAINS WITH PASSAGEWAY */
         .mountain {
             position: fixed;
             bottom: 30%;
@@ -89,7 +88,6 @@
 
         .mtn-back {
             background: #1a0033;
-            /* Creates a center gap for the road to "emerge" from */
             clip-path: polygon(0% 100%, 10% 40%, 30% 85%, 42% 50%, 45% 100%, 55% 100%, 58% 50%, 70% 85%, 90% 40%, 100% 100%);
             opacity: 0.4;
             filter: blur(2px);
@@ -97,20 +95,17 @@
 
         .mtn-front {
             background: linear-gradient(to bottom, #300066, var(--bg-dark));
-            /* Sharper center gap */
             clip-path: polygon(0% 100%, 15% 50%, 35% 90%, 45% 60%, 48% 100%, 52% 100%, 55% 60%, 65% 90%, 85% 50%, 100% 100%);
             border-top: 3px solid var(--neon-pink);
             filter: drop-shadow(0 0 15px var(--neon-pink));
         }
 
-        /* PASSAGEWAY ROAD */
         .grid-container {
             position: fixed;
             bottom: 0;
             width: 100%;
             height: 50vh;
             z-index: -1;
-            /* Narrower perspective to force a sharper vanishing point in the middle */
             perspective: 200px;
             perspective-origin: 50% 0%; 
             overflow: hidden;
@@ -130,7 +125,6 @@
             transform: rotateX(75deg);
             transform-origin: top;
             animation: roadMove 2s linear infinite;
-            /* Fades the road into the mountain gap */
             mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
         }
 
@@ -221,15 +215,54 @@
             box-shadow: 0 0 30px var(--neon-pink);
             text-align: center;
             z-index: 10;
-            width: 320px;
+            width: fit-content;
+            min-width: 320px;
         }
 
         footer h3 { color: var(--neon-pink); margin-top: 0; }
-        footer p { color: var(--neon-blue); font-family: monospace; font-size: 1rem; }
+        
+        .email-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        #email-text { 
+            color: var(--neon-blue); 
+            font-family: monospace; 
+            font-size: 1rem; 
+            text-shadow: 0 0 5px var(--neon-blue); 
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .copy-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
 
         @media (max-width: 700px) {
             .shop-container { grid-template-columns: 1fr; }
             .sun { width: 200px; height: 200px; }
+            .email-box { flex-direction: column; }
         }
     </style>
 </head>
@@ -246,39 +279,43 @@
     </div>
 
     <header>
-        <h1>Replace Shop Name</h1>
+        <h1>Acid Synthetics</h1>
     </header>
 
     <div class="shop-container">
         <div class="product-card">
-            <h2>x replace item name</h2>
+            <h2>100 PCS 1C-LSD</h2>
             <img src="https://picsum.photos/400/300?random=10" alt="item">
-            <span class="price">100 EUR</span>
-            <p class="description">sample description please replace</p>
+            <span class="price">300 EUR</span>
+            <p class="description"> 1-Capronyl Lsyergic Acid  Diethylamide <br> ONE HUNDRED tabs; 130 micrograms/tab <br> 10x10 matrix
+            </p>
         </div>
         <div class="product-card">
-            <h2>x replace item name</h2>
+            <h2>759 PCS 1C-LSD</h2>
             <img src="https://picsum.photos/400/300?random=11" alt="item">
-            <span class="price">100 EUR</span>
-            <p class="description">sample description please replace</p>
+            <span class="price">1518 EUR</span>
+            <p class="description">1-Capronyl Lsyergic Acid  Diethylamide <br> seven hundred fifty-nine tabs<br> 130 micrograms/tab full sheet <br> custom print available </p>
         </div>
         <div class="product-card">
-            <h2>x replace item name</h2>
+            <h2>1000 Drops of 1C-LSD</h2>
             <img src="https://picsum.photos/400/300?random=12" alt="item">
-            <span class="price">100 EUR</span>
-            <p class="description">sample description please replace</p>
+            <span class="price">2000 EUR</span>
+            <p class="description">1-Capronyl Lsyergic Acid  Diethylamide <br> Solution for 1000drops; 130 micrograms/drop</p>
         </div>
         <div class="product-card">
-            <h2>x replace item name</h2>
+            <h2>1g 1C-LSD</h2>
             <img src="https://picsum.photos/400/300?random=13" alt="item">
-            <span class="price">100 EUR</span>
-            <p class="description">sample description please replace</p>
+            <span class="price">15.000 EUR</span>
+            <p class="description">1 Gram of pure 1-Capronyl Lsyergic Acid  Diethylamide</p>
         </div>
     </div>
 
     <footer>
         <h3>CONTACT</h3>
-        <p>example@email.com</p>
+        <div class="email-box">
+            <span id="email-text">example@email.com</span>
+            <button class="copy-btn" onclick="copyEmail()">Copy</button>
+        </div>
     </footer>
 
     <script>
@@ -301,12 +338,31 @@
 
         window.addEventListener('scroll', () => {
             const scroll = window.pageYOffset;
-            // Mountains still move slightly for parallax depth
             const mtnFront = document.querySelector('.mtn-front');
             const mtnBack = document.querySelector('.mtn-back');
-            mtnFront.style.transform = `translateY(${scroll * 0.1}px)`;
-            mtnBack.style.transform = `translateY(${scroll * 0.03}px)`;
+            if(mtnFront) mtnFront.style.transform = `translateY(${scroll * 0.1}px)`;
+            if(mtnBack) mtnBack.style.transform = `translateY(${scroll * 0.03}px)`;
         });
+
+        function copyEmail() {
+            const email = document.getElementById('email-text').innerText;
+            const btn = document.querySelector('.copy-btn');
+            
+            navigator.clipboard.writeText(email).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.style.borderColor = 'var(--neon-pink)';
+                btn.style.color = 'var(--neon-pink)';
+                btn.style.boxShadow = '0 0 15px var(--neon-pink)';
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.borderColor = 'var(--neon-blue)';
+                    btn.style.color = 'var(--neon-blue)';
+                    btn.style.boxShadow = '0 0 5px var(--neon-blue)';
+                }, 1500);
+            });
+        }
     </script>
 </body>
 </html>
