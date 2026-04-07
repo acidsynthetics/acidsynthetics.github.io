@@ -1,11 +1,12 @@
 ---
 layout: null
 ---
+<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Syntheticstest</title>
+ <title>Synthetics</title>
  <style>
  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Mr+Dafoe&display=swap');
 
@@ -302,7 +303,7 @@ layout: null
  <h2>759 PCS x</h2>
  <img src="https://picsum.photos/400/300?random=11" alt="item">
  <span class="price">1518 EUR</span>
- <p class="description">x<br> custom print available </p>
+ <p class="description">x<br> custom print available test 1 </p>
  </div>
  <div class="product-card">
  <h2>1000 Drops of replace</h2>
